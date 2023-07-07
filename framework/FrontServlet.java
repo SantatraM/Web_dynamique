@@ -74,7 +74,15 @@ public class FrontServlet extends HttpServlet {
                     Class<?> c =Class.forName(className);
                     Object classe = c.newInstance();
                     mv = (ModelView) c.getDeclaredMethod(methodName).invoke(classe);
-                    System.out.println("Cle: " + key + ", Classe: " + className + ", Methode: " + methodName);
+                    // System.out.println("Cle: " + key + ", Classe: " + className + ", Methode: " + methodName);
+
+                    HashMap<String,Object> data = mv.getData();
+                    for(Map.Entry<String,Object> entry : data.entrySet()){
+                        String keys = entry.getKey();
+                        Object val = entry.getValue();
+                        request.setAttribute(keys,val);
+                    }
+                    
                     RequestDispatcher dispatcher = request.getRequestDispatcher(mv.getView());
                     dispatcher.forward(request,response);
                 }
