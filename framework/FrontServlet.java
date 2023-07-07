@@ -10,6 +10,10 @@ import java.util.*;
 import java.lang.reflect.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Map;
+
+import java.lang.reflect.Field;
+import java.util.Enumeration;
 
 public class FrontServlet extends HttpServlet {
     HashMap<String, Mapping> mappingUrls;
@@ -62,33 +66,47 @@ public class FrontServlet extends HttpServlet {
         String url = request.getRequestURL().toString();
         Util util = new Util();
         String value = util.getUrl(url);
-        // out.println(value);
-
+        
         ModelView mv = new ModelView();
-        try{
+        try {
             for (String key : mappingUrls.keySet()) {
                 Mapping map = mappingUrls.get(key);
                 String className = map.getClassName();
                 String methodName = map.getMethod();
-                if(value.equals(key)){
-                    Class<?> c =Class.forName(className);
+                if (value.equals(key)) {
+                    Class<?> c = Class.forName(className);
                     Object classe = c.newInstance();
                     mv = (ModelView) c.getDeclaredMethod(methodName).invoke(classe);
-                    // System.out.println("Cle: " + key + ", Classe: " + className + ", Methode: " + methodName);
+                    
+                    // Obtenez les paramètres du formulaire et associez-les aux attributs correspondants de la classe modèle
+                    if(map.getMethod().equalsIgnoreCase("save")) {
+                        for (Field field : c.getDeclaredFields()) {
+                            String fieldName = field.getName();
+                            String parameterValue = request.getParameter(fieldName);
+                            if (parameterValue != null) {
+                                Object values = Util.parseType(parameterValue, field.getType());
+                                field.setAccessible(true);
+                                field.set(classe, values);
+                            }
+                        }
+                    }
 
-                    HashMap<String,Object> data = mv.getData();
-                    for(Map.Entry<String,Object> entry : data.entrySet()){
+
+                    HashMap<String, Object> data = mv.getData();
+                    for (Map.Entry<String, Object> entry : data.entrySet()) {
                         String keys = entry.getKey();
                         Object val = entry.getValue();
-                        request.setAttribute(keys,val);
+                        request.setAttribute(keys, val);
                     }
                     
                     RequestDispatcher dispatcher = request.getRequestDispatcher(mv.getView());
-                    dispatcher.forward(request,response);
+                    dispatcher.forward(request, response);
+                
                 }
-            }
-        }catch(Exception ex){
 
+            }
+        } catch (Exception ex) {
+            // Gérer les exceptions
         }
     }
   
