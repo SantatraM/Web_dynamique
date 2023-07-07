@@ -7,8 +7,8 @@ import java.sql.Date;
 
 
 public class Emp {
-    private int id;
-    private String nom;
+    int id;
+    String nom;
     private Date date_naissance;
 
     // getters & setters
@@ -59,4 +59,38 @@ public class Emp {
         mv.addItem("lst",listEmp);
         return mv;
     }
+
+    @Urls("emp_add")
+    public ModelView Add() {
+        ModelView mv = new ModelView();
+        mv.setView("emp-add.jsp");
+        return mv;
+    }
+
+    @Urls("save_emp")
+    public ModelView save(){
+        ModelView mv = new ModelView();
+        System.out.println(" id :  "+getId()); 
+        System.out.println(" nom :  "+getNom()); 
+        mv.setView("save.jsp");
+        mv.addItem("employe", this);
+        return mv;
+    }
+    
+    //  public ModelView2 save(){
+    //     ModelView2 view = new ModelView2( "save.jsp" );
+    //     System.out.println(" nom :  "+getNom()); 
+    //     System.out.println(" fichier : "+getFichier().toString());
+    //     // System.out.println(" prenom :  "+getPrenom()); 
+    //     // System.out.println(" data :  "+getData().toString()); 
+    //     System.out.println(" check : "+Arrays.toString( check  ));
+    //     view.addItem("fichier",  getFichier().getName() );
+    //     try{
+    //         saveByte( getFichier().getName() , getFichier().getBytes() );
+    //     }catch( Exception e ){
+    //         e.printStackTrace();
+    //     }
+    //     view.addItem("nom",  getNom() );
+    //     return view;
+    // }
 }

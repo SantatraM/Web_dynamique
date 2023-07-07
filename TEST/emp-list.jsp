@@ -12,21 +12,11 @@
 
 <body>
     <h1>bienvenue dans Emp</h1>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>NOM</th>
-        </tr>
-        
-        <% List<Emp> liste = (List<Emp>) request.getAttribute("lst");
-        for(int i=0;i< liste.size();i++) { %>
-            <tr>
-                <td><% out.println(liste.get(i).getId()); %></td>
-                <td><% out.println(liste.get(i).getNom()); %></td>
-            </tr>
-        <% } %>
-        
-    </table>
+    <% List<Emp> liste = (List<Emp>) request.getAttribute("lst");
+    for(int i=0;i < liste.size();i++) { %>
+        <p>ID: <% out.println(liste.get(i).getId()); %></p>
+        <p>NOM: <% out.println(liste.get(i).getNom()); %></p>
+    <% } %>
 </body>
 
 </html>
