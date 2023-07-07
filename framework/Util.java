@@ -14,7 +14,19 @@ public class Util {
         String path = parts[0];
         String[] pathParts = path.split("/");
         return pathParts[pathParts.length - 1];
-    }     
+    }   
+
+    // public String getUrl(String url){
+    //     URI uri = URI.create(url);
+    //     String uriPath = uri.getPath();
+    //     String [] values = uriPath.split("/");
+    //     String value = "";
+    //     for(int i = 2;i<values.length - 1;i++){
+    //         value +=values[i] + "/";
+    //     }
+    //     value +=values[values.length -1];
+    //     return value;
+    // }
 
     public ArrayList<File> getFiles(String path){
         ArrayList<File> files = new ArrayList<File>();

@@ -1,6 +1,7 @@
 package modele;
 
 import etu1787.framework.annotation.Urls;
+import etu1787.framework.*;
 
 import java.sql.Date;
 
@@ -45,8 +46,11 @@ public class Emp {
         setNom(nom);
 
     }
-    @Urls("emp-all")
-    public void hello(){
-        System.out.println("hello");
+
+    @Urls("emp-list")
+    public ModelView List(){
+        ModelView mv = new ModelView();
+        mv.setView("emp-list.jsp");
+        return mv;
     }
 }

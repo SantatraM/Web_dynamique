@@ -64,12 +64,23 @@ public class FrontServlet extends HttpServlet {
         String value = util.getUrl(url);
         // out.println(value);
 
-        // Affichage du résultat du hashmap
-        for (String key : mappingUrls.keySet()) {
-            Mapping map = mappingUrls.get(key);
-            String className = map.getClassName();
-            String methodName = map.getMethod();
-            out.println("Cle: " + key + ", Classes: " + className + ", Methode: " + methodName);
+        ModelView mv = new ModelView();
+        try{
+            for (String key : mappingUrls.keySet()) {
+                Mapping map = mappingUrls.get(key);
+                String className = map.getClassName();
+                String methodName = map.getMethod();
+                if(value.equals(key)){
+                    Class<?> c =Class.forName(className);
+                    Object classe = c.newInstance();
+                    mv = (ModelView) c.getDeclaredMethod(methodName).invoke(classe);
+                    System.out.println("Cle: " + key + ", Classe: " + className + ", Methode: " + methodName);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher(mv.getView());
+                    dispatcher.forward(request,response);
+                }
+            }
+        }catch(Exception ex){
+
         }
     }
   
